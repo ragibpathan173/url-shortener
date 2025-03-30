@@ -11,9 +11,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.sivalabs</groupId>
-	<artifactId>spring-boot-url-shortener</artifactId>
+	<artifactId>spring-boot-url-shortener-part-3</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>spring-boot-url-shortener</name>
+	<name>spring-boot-url-shortener-part-3</name>
 	<description>URL Shortener using Spring Boot</description>
 
 	<properties>
@@ -38,7 +38,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
