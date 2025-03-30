@@ -29,7 +29,7 @@ public class ShortUrl {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
-    private com.sivalabs.urlshortener.domain.entities.User createdBy;
+    private User createdBy;
 
     @ColumnDefault("0")
     @Column(name = "click_count", nullable = false)
@@ -79,11 +79,11 @@ public class ShortUrl {
         this.expiresAt = expiresAt;
     }
 
-    public com.sivalabs.urlshortener.domain.entities.User getCreatedBy() {
+    public User getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(com.sivalabs.urlshortener.domain.entities.User createdBy) {
+    public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
     }
 
