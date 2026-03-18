@@ -21,7 +21,7 @@ A full-stack Spring Boot URL shortener with user accounts, private links, click 
 ## Run Locally
 
 ```bash
-cd spring-boot-url-shortener-final
+cd spring-boot-url-shortener
 mvn spring-boot:run
 ```
 
@@ -30,6 +30,6 @@ Open `http://localhost:8080`
 ## Docker
 
 ```bash
-cd spring-boot-url-shortener-final/docker
+cd spring-boot-url-shortener/docker
 docker compose up --build
 ```
