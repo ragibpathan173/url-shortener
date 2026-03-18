@@ -1,5 +1,5 @@
-<nav th:if="${shortUrls.totalPages > 1}">
-    <ul class="pagination justify-content-center">
+<nav th:if="${shortUrls.totalPages > 1}" class="app-pagination-nav">
+    <ul class="pagination justify-content-center app-pagination">
         <li class="page-item" th:classappend="${shortUrls.isFirst ? 'disabled' : ''}">
             <a class="page-link" th:href="@{${paginationUrl}(page=1)}" aria-label="First">
                 <span aria-hidden="true">First</span>
