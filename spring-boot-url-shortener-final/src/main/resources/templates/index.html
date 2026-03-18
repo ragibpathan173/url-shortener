@@ -11,17 +11,38 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="jumbotron bg-light p-5 rounded-3 my-4">
-        <p class="lead">A simple URL shortener service. Create short, easy-to-share links.</p>
-    </div>
-
-    <div class="card mt-4">
-        <div class="card-header">
-            <h5 class="card-title mb-0">Create a Short URL</h5>
+    <section class="hero-panel my-4">
+        <div class="hero-copy">
+            <span class="eyebrow">Link Management</span>
+            <h1 class="hero-title">Turn long, messy URLs into clean links people actually want to click.</h1>
+            <p class="hero-text">Create branded-looking short links, keep private URLs under your account, and track which links are actively being used.</p>
         </div>
-        <div class="card-body">
+        <div class="hero-stats">
+            <div class="stat-card">
+                <span class="stat-label">Share faster</span>
+                <strong>Cleaner links</strong>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Built in</span>
+                <strong>Expiry controls</strong>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Visibility</span>
+                <strong>Click tracking</strong>
+            </div>
+        </div>
+    </section>
+
+    <section class="card app-card app-card-highlight mt-4">
+        <div class="card-header app-card-header">
+            <div>
+                <span class="section-kicker">Create</span>
+                <h5 class="card-title mb-0">Create a short URL</h5>
+            </div>
+        </div>
+        <div class="card-body app-card-body">
             <form th:action="@{/short-urls}" method="post"
-                  th:object="${createShortUrlForm}">
+                  th:object="${createShortUrlForm}" class="app-form">
                 <div class="mb-3">
                     <label for="originalUrl" class="form-label">Original URL</label>
                     <input type="text" class="form-control" id="originalUrl"
@@ -44,17 +65,22 @@
                     <label class="form-check-label" for="isPrivate">Private (only you can access)</label>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Shorten URL</button>
+                <button type="submit" class="btn btn-primary app-btn-primary">Shorten URL</button>
             </form>
         </div>
-    </div>
+    </section>
 
-    <h2 class="mt-5">Public Shortened URLs</h2>
-    <div th:if="${shortUrls.data.isEmpty()}" class="alert alert-info">
+    <div class="section-heading mt-5">
+        <div>
+            <span class="section-kicker">Discover</span>
+            <h2>Public shortened URLs</h2>
+        </div>
+    </div>
+    <div th:if="${shortUrls.data.isEmpty()}" class="alert alert-info app-alert">
         No public URLs have been created yet.
     </div>
-    <div th:unless="${shortUrls.data.isEmpty()}" class="table-responsive">
-        <table class="table table-striped table-hover">
+    <div th:unless="${shortUrls.data.isEmpty()}" class="table-responsive app-table-wrap">
+        <table class="table table-hover app-table">
             <thead>
             <tr>
                 <th>Short URL</th>

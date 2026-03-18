@@ -10,14 +10,17 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <div class="row justify-content-center mt-5">
+        <div class="row justify-content-center auth-row">
             <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Register</h5>
+                <div class="card app-card auth-card">
+                    <div class="card-header app-card-header">
+                        <div>
+                            <span class="section-kicker">Create account</span>
+                            <h5 class="card-title mb-0">Register</h5>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <form th:action="@{/register}" method="post" th:object="${user}">
+                    <div class="card-body app-card-body">
+                        <form th:action="@{/register}" method="post" th:object="${user}" class="app-form">
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control" id="email" th:field="*{email}">
@@ -33,9 +36,9 @@
                                 <input type="text" class="form-control" id="name" th:field="*{name}">
                                 <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
                             </div>
-                            <button type="submit" class="btn btn-primary">Register</button>
+                            <button type="submit" class="btn btn-primary app-btn-primary w-100">Register</button>
                         </form>
-                        <div class="mt-3">
+                        <div class="mt-4 auth-footer">
                             <p>Already have an account? <a th:href="@{/login}">Login</a></p>
                         </div>
                     </div>
