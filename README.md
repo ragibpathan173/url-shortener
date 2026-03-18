@@ -30,6 +30,20 @@ Open `http://localhost:8080`
 ## Docker
 
 ```bash
-cd spring-boot-url-shortener/docker
-docker compose up --build
+cd spring-boot-url-shortener
+docker compose -f docker/compose.yaml up --build
+```
+
+Open `http://localhost:8080`
+
+Run in background:
+
+```bash
+docker compose -f docker/compose.yaml up --build -d
+```
+
+Stop containers:
+
+```bash
+docker compose -f docker/compose.yaml down
 ```
