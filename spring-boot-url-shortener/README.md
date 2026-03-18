@@ -39,29 +39,28 @@ http://localhost:8080
 
 ## Docker
 
-Start PostgreSQL only:
+Run the full app with PostgreSQL:
 
 ```bash
-docker compose up -d
+docker compose -f docker/compose.yaml up --build
 ```
 
-Or use the app container setup inside the `docker` folder:
+Open the app at:
 
-```bash
-cd docker
-docker compose up -d
+```text
+http://localhost:8080
 ```
 
-Build the app image locally:
+Run in background:
 
 ```bash
-docker build -t ragib-url-shortener .
+docker compose -f docker/compose.yaml up --build -d
 ```
 
-Run the app container with the bundled H2 database:
+Stop containers:
 
 ```bash
-docker run --rm -p 8080:8080 ragib-url-shortener
+docker compose -f docker/compose.yaml down
 ```
 
 ## Project Structure
