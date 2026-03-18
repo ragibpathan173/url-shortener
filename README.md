@@ -1,18 +1,24 @@
-# URL Shortener
+# Ragib URL Shortener
 
-This is my Spring Boot URL Shortener project.
+A full-stack Spring Boot URL shortener with user accounts, private links, click tracking, and Docker support.
 
-## Features
-- Create short URLs from long links
-- Public and private URLs
-- User registration and login
-- Admin dashboard
-- Click tracking
-- Docker support
+## What It Does
+- Shortens long URLs into compact shareable links
+- Supports guest link creation
+- Lets signed-in users create private links and set expiry dates
+- Tracks click counts
+- Includes an admin dashboard for managing all links
 
-## Run
+## Tech Stack
+- Java 21
+- Spring Boot
+- Spring Security
+- Spring Data JPA
+- Thymeleaf
+- H2 and PostgreSQL
+- Docker
 
-From the app folder:
+## Run Locally
 
 ```bash
 cd spring-boot-url-shortener-final
@@ -20,3 +26,10 @@ mvn spring-boot:run
 ```
 
 Open `http://localhost:8080`
+
+## Docker
+
+```bash
+cd spring-boot-url-shortener-final/docker
+docker compose up --build
+```
