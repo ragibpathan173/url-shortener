@@ -1,6 +1,6 @@
-# URI Shortener
+# Ragib URL Shortener
 
-URI Shortener is a Spring Boot web application for creating short, shareable links from long URLs.
+Ragib URL Shortener is a Spring Boot web application for creating short, shareable links from long URLs.
 
 ## Features
 - Create short URLs from long links
@@ -55,13 +55,13 @@ docker compose up -d
 Build the app image locally:
 
 ```bash
-docker build -t spring-boot-url-shortener .
+docker build -t ragib-url-shortener .
 ```
 
 Run the app container with the bundled H2 database:
 
 ```bash
-docker run --rm -p 8080:8080 spring-boot-url-shortener
+docker run --rm -p 8080:8080 ragib-url-shortener
 ```
 
 ## Project Structure

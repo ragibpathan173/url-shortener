@@ -17,7 +17,7 @@
  <artifactId>uri-shortener</artifactId>
  <version>0.0.1-SNAPSHOT</version>
  <name>uri-shortener</name>
- <description>URI Shortener web application built with Spring Boot</description>
+ <description>Ragib URL Shortener web application built with Spring Boot</description>
 
  <properties>
   <java.version>21</java.version>

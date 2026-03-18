@@ -8,11 +8,11 @@ services:
     ports:
       - '5432'
 
-  spring-boot-url-shortener:
+  ragib-url-shortener:
     build:
       context: ..
       dockerfile: Dockerfile
-    container_name: spring-boot-url-shortener
+    container_name: ragib-url-shortener
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
       SPRING_DATASOURCE_USERNAME: postgres
