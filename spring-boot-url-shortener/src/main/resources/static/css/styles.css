@@ -28,11 +28,13 @@ html, body {
 
 body {
     margin: 0;
-    color: var(--app-text);
+    color: rgba(255, 255, 255, 0.88);
     background:
-        radial-gradient(circle at top left, rgba(217, 119, 6, 0.16), transparent 30%),
-        radial-gradient(circle at top right, rgba(15, 118, 110, 0.18), transparent 28%),
-        linear-gradient(180deg, #fcf8f2 0%, var(--app-bg) 45%, #eef5f3 100%);
+        radial-gradient(circle at 14% 0%, rgba(20, 184, 166, 0.18), transparent 32%),
+        radial-gradient(circle at 88% 8%, rgba(245, 158, 11, 0.13), transparent 30%),
+        radial-gradient(circle at 50% 100%, rgba(15, 118, 110, 0.12), transparent 34%),
+        linear-gradient(180deg, #050609 0%, #080a10 48%, #050609 100%);
+    background-attachment: fixed;
     font-family: "Trebuchet MS", "Segoe UI", Tahoma, sans-serif;
     padding-top: 98px;
     padding-bottom: 40px;
@@ -60,6 +62,8 @@ a:hover {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    position: relative;
+    z-index: 1;
 }
 
 .app-navbar {
@@ -177,6 +181,12 @@ a:hover {
     background: var(--app-surface);
     backdrop-filter: blur(12px);
     box-shadow: var(--app-shadow);
+}
+
+.app-card,
+.app-table-wrap,
+.app-alert {
+    color: var(--app-text);
 }
 
 .liquid-glass {
@@ -338,6 +348,18 @@ a:hover {
     align-items: end;
     justify-content: space-between;
     gap: 1rem;
+    color: #ffffff;
+}
+
+.section-heading h2 {
+    color: #ffffff;
+    text-shadow: 0 12px 34px rgba(0, 0, 0, 0.34);
+}
+
+.section-heading .section-kicker {
+    color: rgba(255, 255, 255, 0.82);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .app-form .form-label {
@@ -464,7 +486,7 @@ a:hover {
 }
 
 .auth-footer {
-    color: var(--app-muted);
+    color: rgba(255, 255, 255, 0.66);
     text-align: center;
 }
 
