@@ -54,6 +54,30 @@ a:hover {
     color: var(--app-primary-dark);
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+    outline: 3px solid rgba(20, 184, 166, 0.72);
+    outline-offset: 3px;
+}
+
+.nav-link:focus-visible,
+.hero-action:focus-visible,
+.app-btn-primary:focus-visible,
+.app-btn-danger:focus-visible {
+    outline: 0;
+    box-shadow:
+        0 0 0 0.22rem rgba(20, 184, 166, 0.24),
+        0 14px 30px rgba(20, 184, 166, 0.18);
+}
+
+.form-control:focus-visible,
+.form-check-input:focus-visible,
+.page-link:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 0.24rem rgba(20, 184, 166, 0.2);
+}
+
 .page-shell {
     min-height: 100vh;
 }
@@ -270,6 +294,15 @@ a:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+
     .hero-video {
         display: none;
     }
