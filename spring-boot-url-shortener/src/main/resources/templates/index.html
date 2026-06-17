@@ -86,8 +86,11 @@
             <h2>Public shortened URLs</h2>
         </div>
     </div>
-    <div th:if="${shortUrls.data.isEmpty()}" class="alert alert-info app-alert">
-        No public URLs have been created yet.
+    <div th:if="${shortUrls.data.isEmpty()}" class="app-empty-state">
+        <span class="section-kicker">Ready when you are</span>
+        <h3>No public URLs yet</h3>
+        <p>Create the first public short link and it will appear here for everyone to discover.</p>
+        <a class="hero-action hero-action-primary" href="#create-short-url">Create first link</a>
     </div>
     <div th:unless="${shortUrls.data.isEmpty()}" class="table-responsive app-table-wrap">
         <table class="table table-hover app-table">

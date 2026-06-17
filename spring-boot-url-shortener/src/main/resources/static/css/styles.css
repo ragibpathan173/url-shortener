@@ -183,7 +183,6 @@ a:hover {
     box-shadow: var(--app-shadow);
 }
 
-.app-table-wrap,
 .app-alert {
     color: var(--app-text);
 }
@@ -573,29 +572,86 @@ a:hover {
 .app-table-wrap {
     overflow: hidden;
     padding: 0.6rem;
+    color: rgba(255, 255, 255, 0.84);
+    border-color: var(--app-glass-border);
+    background:
+        radial-gradient(circle at 10% 0%, rgba(20, 184, 166, 0.14), transparent 30%),
+        radial-gradient(circle at 90% 12%, rgba(245, 158, 11, 0.1), transparent 28%),
+        linear-gradient(150deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025)),
+        rgba(8, 10, 16, 0.82);
+    box-shadow:
+        0 26px 70px rgba(5, 6, 9, 0.24),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
 }
 
 .app-table {
     margin-bottom: 0;
     --bs-table-bg: transparent;
-    --bs-table-hover-bg: rgba(15, 118, 110, 0.05);
+    --bs-table-color: rgba(255, 255, 255, 0.82);
+    --bs-table-hover-color: #ffffff;
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.07);
+    --bs-table-border-color: rgba(255, 255, 255, 0.09);
 }
 
 .app-table thead th {
-    border-bottom: 1px solid var(--app-border);
-    color: var(--app-muted);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.58);
     font-size: 0.78rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-weight: 700;
-    background: rgba(255, 255, 255, 0.58);
+    background: rgba(255, 255, 255, 0.06);
 }
 
 .app-table th,
 .app-table td {
     padding: 1rem 1.1rem;
     vertical-align: middle;
-    border-color: rgba(79, 59, 44, 0.08);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.app-table a {
+    color: #8ef5e6;
+}
+
+.app-table a:hover,
+.app-table a:focus {
+    color: #ffffff;
+}
+
+.app-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.95rem;
+    padding: 1.6rem 1.75rem;
+    border: 1px solid var(--app-glass-border);
+    border-radius: var(--app-radius-xl);
+    color: rgba(255, 255, 255, 0.86);
+    background:
+        radial-gradient(circle at 12% 0%, rgba(20, 184, 166, 0.15), transparent 32%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025)),
+        rgba(8, 10, 16, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow:
+        0 22px 60px rgba(5, 6, 9, 0.24),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.app-empty-state h3 {
+    margin: 0;
+    color: #ffffff;
+    font-family: "Instrument Serif", Georgia, "Times New Roman", serif;
+    font-size: clamp(1.7rem, 3vw, 2.3rem);
+    line-height: 1.05;
+}
+
+.app-empty-state p {
+    max-width: 36rem;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.64);
+    line-height: 1.7;
 }
 
 .app-badge {
