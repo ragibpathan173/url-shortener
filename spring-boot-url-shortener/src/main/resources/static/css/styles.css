@@ -26,6 +26,10 @@ html, body {
     height: 100%;
 }
 
+html {
+    scroll-padding-top: 120px;
+}
+
 body {
     margin: 0;
     color: rgba(255, 255, 255, 0.88);
@@ -64,6 +68,11 @@ a:hover {
     gap: 1.5rem;
     position: relative;
     z-index: 1;
+}
+
+#create-short-url,
+#public-urls {
+    scroll-margin-top: 120px;
 }
 
 .app-navbar {
@@ -585,6 +594,7 @@ a:hover {
 }
 
 .app-table {
+    min-width: 760px;
     margin-bottom: 0;
     --bs-table-bg: transparent;
     --bs-table-color: rgba(255, 255, 255, 0.82);
@@ -652,6 +662,10 @@ a:hover {
     margin: 0;
     color: rgba(255, 255, 255, 0.64);
     line-height: 1.7;
+}
+
+.app-empty-state .hero-action {
+    align-self: flex-start;
 }
 
 .app-badge {
@@ -722,6 +736,21 @@ a:hover {
 
     .hero-panel {
         grid-template-columns: 1fr;
+        gap: 1.25rem;
+        padding: 1.6rem;
+    }
+
+    .hero-stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .stat-card {
+        min-width: 0;
+    }
+
+    .section-heading {
+        align-items: flex-start;
+        flex-direction: column;
     }
 
     .navbar-nav {
@@ -759,12 +788,21 @@ a:hover {
         font-size: 2rem;
     }
 
+    .hero-stats {
+        grid-template-columns: 1fr;
+    }
+
     .hero-actions {
         flex-direction: column;
     }
 
-    .hero-action {
+    .hero-action,
+    .app-empty-state .hero-action {
         width: 100%;
+    }
+
+    .app-empty-state {
+        padding: 1.35rem;
     }
 
     .app-table th,
