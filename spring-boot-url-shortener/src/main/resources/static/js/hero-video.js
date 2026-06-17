@@ -12,7 +12,7 @@
 
     const fadeDuration = 500;
     const fadeOutLeadTime = 0.55;
-    const visibleOpacity = 0.42;
+    const visibleOpacity = 0.58;
 
     let animationFrameId = null;
     let fadingOut = false;
@@ -95,4 +95,12 @@
         }
     });
     video.addEventListener("ended", restartVideo);
+
+    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA || !video.paused) {
+        fadeIn();
+    }
+
+    video.play().catch(function () {
+        // Autoplay can be blocked by the browser, but the page still works without motion.
+    });
 })();
