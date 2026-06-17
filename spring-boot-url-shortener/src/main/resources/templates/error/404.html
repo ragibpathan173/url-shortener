@@ -10,7 +10,15 @@
 </head>
 <body>
 <div layout:fragment="content">
-<h1>Request Short URL Not Found or Expired</h1>
+    <section class="error-panel">
+        <span class="section-kicker">404</span>
+        <h1>Short link not found</h1>
+        <p>The link may be expired, private, or typed incorrectly. You can return home and create a new short URL.</p>
+        <div class="hero-actions">
+            <a class="hero-action hero-action-primary" th:href="@{/}">Go home</a>
+            <a class="hero-action hero-action-secondary" th:href="@{/#create-short-url}">Create short URL</a>
+        </div>
+    </section>
 </div>
 </body>
 </html>

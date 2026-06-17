@@ -701,6 +701,41 @@ input:focus-visible {
     align-self: flex-start;
 }
 
+.error-panel {
+    max-width: 760px;
+    margin: 2rem auto 0;
+    padding: 2rem;
+    border: 1px solid var(--app-glass-border);
+    border-radius: var(--app-radius-xl);
+    color: rgba(255, 255, 255, 0.86);
+    background:
+        radial-gradient(circle at 12% 0%, rgba(20, 184, 166, 0.16), transparent 34%),
+        radial-gradient(circle at 88% 10%, rgba(245, 158, 11, 0.12), transparent 30%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025)),
+        rgba(8, 10, 16, 0.84);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow:
+        0 28px 76px rgba(5, 6, 9, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.error-panel h1 {
+    margin: 0.9rem 0 0.8rem;
+    color: #ffffff;
+    font-family: "Instrument Serif", Georgia, "Times New Roman", serif;
+    font-size: clamp(2.4rem, 6vw, 4.4rem);
+    line-height: 1;
+}
+
+.error-panel p {
+    max-width: 42rem;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.66);
+    font-size: 1.03rem;
+    line-height: 1.75;
+}
+
 .app-badge {
     border-radius: 999px;
     padding: 0.5rem 0.8rem;

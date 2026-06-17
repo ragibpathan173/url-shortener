@@ -10,7 +10,15 @@
 </head>
 <body>
 <div layout:fragment="content">
-<h1>Some Error Occurred While Processing Your Request</h1>
+    <section class="error-panel">
+        <span class="section-kicker">500</span>
+        <h1>Something went wrong</h1>
+        <p>We could not process this request. Try again from the home page or create a fresh short URL.</p>
+        <div class="hero-actions">
+            <a class="hero-action hero-action-primary" th:href="@{/}">Go home</a>
+            <a class="hero-action hero-action-secondary" th:href="@{/#create-short-url}">Create short URL</a>
+        </div>
+    </section>
 </div>
 </body>
 </html>
