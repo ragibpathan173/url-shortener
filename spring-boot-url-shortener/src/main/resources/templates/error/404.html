@@ -11,9 +11,11 @@
 <body>
 <div layout:fragment="content">
     <section class="error-panel">
-        <span class="section-kicker">404</span>
-        <h1>Short link not found</h1>
-        <p>The link may be expired, private, or typed incorrectly. You can return home and create a new short URL.</p>
+        <span class="section-kicker" th:text="${errorCode ?: '404'}">404</span>
+        <h1 th:text="${errorTitle ?: 'Short link not found'}">Short link not found</h1>
+        <p th:text="${errorMessage ?: 'The link may be expired, private, or typed incorrectly. You can return home and create a new short URL.'}">
+            The link may be expired, private, or typed incorrectly. You can return home and create a new short URL.
+        </p>
         <div class="hero-actions">
             <a class="hero-action hero-action-primary" th:href="@{/}">Go home</a>
             <a class="hero-action hero-action-secondary" th:href="@{/#create-short-url}">Create short URL</a>
