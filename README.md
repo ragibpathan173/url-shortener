@@ -8,6 +8,7 @@ A full-stack Spring Boot URL shortener with user accounts, private links, click 
 - Lets signed-in users create private links and set expiry dates
 - Tracks click counts
 - Includes an admin dashboard for managing all links
+- Provides a responsive cinematic Thymeleaf UI with glass-style cards and a video hero
 
 ## Tech Stack
 - Java 21
@@ -26,6 +27,16 @@ mvn spring-boot:run
 ```
 
 Open `http://localhost:8080`
+
+## Mobile Preview
+
+After starting the app, open `http://localhost:8080` in Chrome or Edge.
+
+Use the browser device toolbar to preview the responsive layout:
+
+```text
+F12 -> Ctrl + Shift + M -> choose a phone viewport -> Ctrl + F5
+```
 
 ## Docker
 
