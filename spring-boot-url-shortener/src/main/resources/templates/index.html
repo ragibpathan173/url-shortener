@@ -57,8 +57,13 @@
                     <label for="originalUrl" class="form-label">Original URL</label>
                     <input type="text" class="form-control" id="originalUrl"
                            th:field="*{originalUrl}"
+                           th:errorclass="is-invalid"
+                           inputmode="url"
+                           autocomplete="url"
+                           aria-describedby="originalUrlError"
                            placeholder="https://example.com/my-long-url">
-                    <div class="text-danger"
+                    <div id="originalUrlError"
+                         class="form-error"
                          th:if="${#fields.hasErrors('originalUrl')}"
                          th:errors="*{originalUrl}"></div>
                 </div>
@@ -67,8 +72,14 @@
                     <label for="expirationInDays" class="form-label">Expiration (days)</label>
                     <input type="number" class="form-control" id="expirationInDays"
                            th:field="*{expirationInDays}"
+                           th:errorclass="is-invalid"
+                           aria-describedby="expirationInDaysHelp expirationInDaysError"
                            min="1" max="365">
-                    <div class="form-text">Leave empty to never expire</div>
+                    <div id="expirationInDaysHelp" class="form-text">Leave empty to never expire</div>
+                    <div id="expirationInDaysError"
+                         class="form-error"
+                         th:if="${#fields.hasErrors('expirationInDays')}"
+                         th:errors="*{expirationInDays}"></div>
                 </div>
                 <div class="mb-3 form-check" sec:authorize="isAuthenticated()">
                     <input type="checkbox" class="form-check-input" id="isPrivate" th:field="*{isPrivate}">

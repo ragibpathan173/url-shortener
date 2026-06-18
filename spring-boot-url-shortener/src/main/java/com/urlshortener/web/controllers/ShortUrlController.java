@@ -1,6 +1,7 @@
 package com.urlshortener.web.controllers;
 
 import com.urlshortener.ApplicationProperties;
+import com.urlshortener.domain.exceptions.InvalidOriginalUrlException;
 import com.urlshortener.domain.exceptions.ShortUrlNotFoundException;
 import com.urlshortener.domain.models.CreateShortUrlCmd;
 import com.urlshortener.domain.models.PagedResult;
@@ -70,6 +71,14 @@ public class ShortUrlController {
             var shortUrlDto = shortUrlService.createShortUrl(cmd);
             redirectAttributes.addFlashAttribute("successMessage", "Short URL created successfully "+
                     properties.baseUrl()+"/s/"+shortUrlDto.shortKey());
+        } catch (InvalidOriginalUrlException e) {
+            bindingResult.rejectValue(
+                    "originalUrl",
+                    "originalUrl.unverified",
+                    "We could not verify that URL. Check it opens in a browser, then try again."
+            );
+            this.addShortUrlsDataToModel(model, 1);
+            return "index";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Failed to create short URL");
 

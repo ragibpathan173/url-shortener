@@ -2,6 +2,7 @@ package com.urlshortener.domain.services;
 
 import com.urlshortener.ApplicationProperties;
 import com.urlshortener.domain.entities.ShortUrl;
+import com.urlshortener.domain.exceptions.InvalidOriginalUrlException;
 import com.urlshortener.domain.models.CreateShortUrlCmd;
 import com.urlshortener.domain.models.PagedResult;
 import com.urlshortener.domain.models.ShortUrlDto;
@@ -77,7 +78,7 @@ public class ShortUrlService {
         if(properties.validateOriginalUrl()) {
             boolean urlExists = UrlExistenceValidator.isUrlExists(cmd.originalUrl());
             if(!urlExists) {
-                throw new RuntimeException("Invalid URL "+cmd.originalUrl());
+                throw new InvalidOriginalUrlException("Original URL could not be verified: " + cmd.originalUrl());
             }
         }
         var shortKey = generateUniqueShortKey();
