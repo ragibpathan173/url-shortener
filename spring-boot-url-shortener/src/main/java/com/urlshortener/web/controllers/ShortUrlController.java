@@ -69,8 +69,10 @@ public class ShortUrlController {
                     userId
             );
             var shortUrlDto = shortUrlService.createShortUrl(cmd);
-            redirectAttributes.addFlashAttribute("successMessage", "Short URL created successfully "+
-                    properties.baseUrl()+"/s/"+shortUrlDto.shortKey());
+            String shortUrl = properties.baseUrl()+"/s/"+shortUrlDto.shortKey();
+            redirectAttributes.addFlashAttribute("successMessage", "Short URL created successfully.");
+            redirectAttributes.addFlashAttribute("shortUrlResult", shortUrl);
+            redirectAttributes.addFlashAttribute("shortUrlOriginalUrl", shortUrlDto.originalUrl());
         } catch (InvalidOriginalUrlException e) {
             bindingResult.rejectValue(
                     "originalUrl",

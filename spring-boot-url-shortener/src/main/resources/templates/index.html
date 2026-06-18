@@ -88,6 +88,31 @@
 
                 <button type="submit" class="btn btn-primary app-btn-primary">Shorten URL</button>
             </form>
+
+            <div class="short-url-result" th:if="${shortUrlResult}">
+                <div>
+                    <span class="section-kicker">Ready to share</span>
+                    <h6>Your short link is live</h6>
+                    <p th:if="${shortUrlOriginalUrl}" th:text="${#strings.abbreviate(shortUrlOriginalUrl, 72)}">
+                        https://example.com/my-long-url
+                    </p>
+                </div>
+                <div class="short-url-result-bar">
+                    <input type="text" class="form-control" th:value="${shortUrlResult}" readonly
+                           aria-label="Created short URL">
+                    <button type="button"
+                            class="btn app-copy-btn"
+                            th:attr="data-copy-url=${shortUrlResult}">
+                        Copy
+                    </button>
+                    <a class="hero-action hero-action-secondary"
+                       th:href="${shortUrlResult}"
+                       target="_blank"
+                       rel="noopener">
+                        Open
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
 

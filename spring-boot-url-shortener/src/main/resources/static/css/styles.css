@@ -583,6 +583,59 @@ input:focus-visible {
     line-height: 1.45;
 }
 
+.short-url-result {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.4rem;
+    padding: 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: var(--app-radius-lg);
+    background:
+        radial-gradient(circle at 12% 0%, rgba(20, 184, 166, 0.18), transparent 34%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025)),
+        rgba(255, 255, 255, 0.04);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.short-url-result h6 {
+    margin: 0.7rem 0 0.35rem;
+    color: #ffffff;
+    font-family: "Instrument Serif", Georgia, "Times New Roman", serif;
+    font-size: 1.65rem;
+    line-height: 1.05;
+}
+
+.short-url-result p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.58);
+    line-height: 1.55;
+    word-break: break-word;
+}
+
+.short-url-result-bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.app-copy-btn {
+    min-height: 3.3rem;
+    padding: 0.75rem 1.1rem;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    color: #04110f;
+    background: linear-gradient(135deg, #ffffff, #bffcf2);
+    font-weight: 700;
+}
+
+.app-copy-btn:hover,
+.app-copy-btn:focus,
+.app-copy-btn.is-copied {
+    color: #04110f;
+    background: linear-gradient(135deg, #ccfbf1, #ffffff);
+}
+
 .app-card .form-check-input {
     border-color: rgba(255, 255, 255, 0.28);
     background-color: rgba(255, 255, 255, 0.1);
@@ -879,6 +932,14 @@ input:focus-visible {
 
     .hero-action,
     .app-empty-state .hero-action {
+        width: 100%;
+    }
+
+    .short-url-result-bar {
+        grid-template-columns: 1fr;
+    }
+
+    .short-url-result-bar .app-copy-btn {
         width: 100%;
     }
 
