@@ -3,6 +3,7 @@ package com.urlshortener.domain.services;
 import com.urlshortener.ApplicationProperties;
 import com.urlshortener.domain.entities.ShortUrl;
 import com.urlshortener.domain.exceptions.InvalidOriginalUrlException;
+import com.urlshortener.domain.exceptions.ShortKeyAlreadyExistsException;
 import com.urlshortener.domain.models.CreateShortUrlCmd;
 import com.urlshortener.domain.models.PagedResult;
 import com.urlshortener.domain.models.ShortUrlDto;
@@ -81,7 +82,7 @@ public class ShortUrlService {
                 throw new InvalidOriginalUrlException("Original URL could not be verified: " + cmd.originalUrl());
             }
         }
-        var shortKey = generateUniqueShortKey();
+        var shortKey = cmd.customAlias() != null ? getAvailableCustomAlias(cmd.customAlias()) : generateUniqueShortKey();
         var shortUrl = new ShortUrl();
         shortUrl.setOriginalUrl(cmd.originalUrl());
         shortUrl.setShortKey(shortKey);
@@ -126,5 +127,12 @@ public class ShortUrlService {
             shortKey = generateRandomShortKey();
         } while (shortUrlRepository.existsByShortKey(shortKey));
         return shortKey;
+    }
+
+    private String getAvailableCustomAlias(String customAlias) {
+        if (shortUrlRepository.existsByShortKey(customAlias)) {
+            throw new ShortKeyAlreadyExistsException(customAlias);
+        }
+        return customAlias;
     }
 }

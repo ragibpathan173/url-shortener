@@ -527,6 +527,12 @@ input:focus-visible {
     color: rgba(255, 255, 255, 0.55);
 }
 
+.form-label-optional {
+    color: rgba(255, 255, 255, 0.48);
+    font-size: 0.82rem;
+    font-weight: 400;
+}
+
 .form-control,
 .form-check-input,
 .page-link {
@@ -742,6 +748,24 @@ input:focus-visible {
 
 .my-urls-table {
     min-width: 1040px;
+}
+
+.app-card .app-alias-input .input-group-text {
+    min-width: 0;
+    border-color: rgba(255, 255, 255, 0.14);
+    border-radius: 14px 0 0 14px;
+    color: rgba(255, 255, 255, 0.62);
+    background: rgba(255, 255, 255, 0.06);
+    font-size: 0.88rem;
+}
+
+.app-card .app-alias-input .form-control {
+    border-left: 0;
+    border-radius: 0 14px 14px 0;
+}
+
+.app-card .app-alias-input .form-control:focus {
+    border-left: 0;
 }
 
 .my-url-actions {

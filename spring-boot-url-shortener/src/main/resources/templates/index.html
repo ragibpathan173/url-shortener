@@ -68,6 +68,27 @@
                          th:errors="*{originalUrl}"></div>
                 </div>
 
+                <div class="mb-3">
+                    <label for="customAlias" class="form-label">Custom alias <span class="form-label-optional">Optional</span></label>
+                    <div class="input-group app-alias-input">
+                        <span class="input-group-text" th:text="${baseUrl + '/s/'}">http://localhost:8080/s/</span>
+                        <input type="text" class="form-control" id="customAlias"
+                               th:field="*{customAlias}"
+                               th:errorclass="is-invalid"
+                               inputmode="text"
+                               autocomplete="off"
+                               maxlength="10"
+                               pattern="[A-Za-z0-9_-]{4,10}"
+                               aria-describedby="customAliasHelp customAliasError"
+                               placeholder="my-link">
+                    </div>
+                    <div id="customAliasHelp" class="form-text">4-10 letters, numbers, hyphens, or underscores.</div>
+                    <div id="customAliasError"
+                         class="form-error"
+                         th:if="${#fields.hasErrors('customAlias')}"
+                         th:errors="*{customAlias}"></div>
+                </div>
+
                 <div class="mb-3" sec:authorize="isAuthenticated()">
                     <label for="expirationInDays" class="form-label">Expiration (days)</label>
                     <input type="number" class="form-control" id="expirationInDays"

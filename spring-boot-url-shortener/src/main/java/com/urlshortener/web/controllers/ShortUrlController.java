@@ -2,6 +2,7 @@ package com.urlshortener.web.controllers;
 
 import com.urlshortener.ApplicationProperties;
 import com.urlshortener.domain.exceptions.InvalidOriginalUrlException;
+import com.urlshortener.domain.exceptions.ShortKeyAlreadyExistsException;
 import com.urlshortener.domain.exceptions.ShortUrlNotFoundException;
 import com.urlshortener.domain.models.CreateShortUrlCmd;
 import com.urlshortener.domain.models.PagedResult;
@@ -39,7 +40,7 @@ public class ShortUrlController {
         this.addShortUrlsDataToModel(model, page);
         model.addAttribute("paginationUrl", "/");
         model.addAttribute("createShortUrlForm",
-                new CreateShortUrlForm("", false, null));
+                new CreateShortUrlForm("", null, false, null));
         return "index";
     }
 
@@ -64,6 +65,7 @@ public class ShortUrlController {
             Long userId = securityUtils.getCurrentUserId();
             CreateShortUrlCmd cmd = new CreateShortUrlCmd(
                     form.originalUrl(),
+                    form.customAlias(),
                     form.isPrivate(),
                     form.expirationInDays(),
                     userId
@@ -78,6 +80,14 @@ public class ShortUrlController {
                     "originalUrl",
                     "originalUrl.unverified",
                     "We could not verify that URL. Check it opens in a browser, then try again."
+            );
+            this.addShortUrlsDataToModel(model, 1);
+            return "index";
+        } catch (ShortKeyAlreadyExistsException e) {
+            bindingResult.rejectValue(
+                    "customAlias",
+                    "customAlias.taken",
+                    "That custom alias is already taken. Try another one."
             );
             this.addShortUrlsDataToModel(model, 1);
             return "index";

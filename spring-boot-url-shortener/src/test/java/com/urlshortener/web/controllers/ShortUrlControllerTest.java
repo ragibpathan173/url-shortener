@@ -2,6 +2,7 @@ package com.urlshortener.web.controllers;
 
 import com.urlshortener.ApplicationProperties;
 import com.urlshortener.domain.exceptions.InvalidOriginalUrlException;
+import com.urlshortener.domain.exceptions.ShortKeyAlreadyExistsException;
 import com.urlshortener.domain.models.CreateShortUrlCmd;
 import com.urlshortener.domain.models.PagedResult;
 import com.urlshortener.domain.models.ShortUrlDto;
@@ -83,6 +84,35 @@ class ShortUrlControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("index"))
                 .andExpect(model().attributeHasFieldErrors("createShortUrlForm", "originalUrl"));
+    }
+
+    @Test
+    void invalidCustomAliasRendersFormError() throws Exception {
+        mockPublicUrls();
+
+        mockMvc.perform(post("/short-urls")
+                        .param("originalUrl", "https://example.com/my-page")
+                        .param("customAlias", "bad alias"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("index"))
+                .andExpect(model().attributeHasFieldErrors("createShortUrlForm", "customAlias"));
+
+        verify(shortUrlService, never()).createShortUrl(any(CreateShortUrlCmd.class));
+    }
+
+    @Test
+    void takenCustomAliasRendersFriendlyFormError() throws Exception {
+        mockPublicUrls();
+        when(securityUtils.getCurrentUserId()).thenReturn(null);
+        when(shortUrlService.createShortUrl(any(CreateShortUrlCmd.class)))
+                .thenThrow(new ShortKeyAlreadyExistsException("my-link"));
+
+        mockMvc.perform(post("/short-urls")
+                        .param("originalUrl", "https://example.com/my-page")
+                        .param("customAlias", "my-link"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("index"))
+                .andExpect(model().attributeHasFieldErrors("createShortUrlForm", "customAlias"));
     }
 
     @Test
