@@ -6,7 +6,10 @@ import org.hibernate.annotations.ColumnDefault;
 import java.time.Instant;
 
 @Entity
-@Table(name = "short_urls")
+@Table(
+        name = "short_urls",
+        uniqueConstraints = @UniqueConstraint(name = "uk_short_urls_short_key", columnNames = "short_key")
+)
 public class ShortUrl {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "short_urls_id_gen")

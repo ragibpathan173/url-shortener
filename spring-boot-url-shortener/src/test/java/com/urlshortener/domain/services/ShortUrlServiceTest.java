@@ -13,6 +13,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.Instant;
 
@@ -56,7 +57,7 @@ class ShortUrlServiceTest {
 
         ShortUrlDto result = shortUrlService.createShortUrl(command);
 
-        verify(shortUrlRepository).save(shortUrlCaptor.capture());
+        verify(shortUrlRepository).saveAndFlush(shortUrlCaptor.capture());
         assertThat(shortUrlCaptor.getValue().getShortKey()).isEqualTo("my-link");
         assertThat(result).isEqualTo(expected);
     }
@@ -69,6 +70,21 @@ class ShortUrlServiceTest {
 
         when(properties.validateOriginalUrl()).thenReturn(false);
         when(shortUrlRepository.existsByShortKey("my-link")).thenReturn(true);
+
+        assertThatThrownBy(() -> shortUrlService.createShortUrl(command))
+                .isInstanceOf(ShortKeyAlreadyExistsException.class);
+    }
+
+    @Test
+    void translatesDatabaseAliasCollisionsToDomainException() {
+        CreateShortUrlCmd command = new CreateShortUrlCmd(
+                "https://example.com/page", "my-link", false, null, null
+        );
+
+        when(properties.validateOriginalUrl()).thenReturn(false);
+        when(shortUrlRepository.existsByShortKey("my-link")).thenReturn(false);
+        when(shortUrlRepository.saveAndFlush(any(ShortUrl.class)))
+                .thenThrow(new DataIntegrityViolationException("duplicate short key"));
 
         assertThatThrownBy(() -> shortUrlService.createShortUrl(command))
                 .isInstanceOf(ShortKeyAlreadyExistsException.class);

@@ -5,10 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 class ShortUrlRepositoryTest {
@@ -28,6 +30,14 @@ class ShortUrlRepositoryTest {
         assertThat(publicUrls.getContent())
                 .extracting(ShortUrl::getShortKey)
                 .containsExactlyInAnyOrder("active01", "forever01");
+    }
+
+    @Test
+    void rejectsDuplicateShortKeys() {
+        shortUrlRepository.saveAndFlush(createShortUrl("same-key", false, null));
+
+        assertThatThrownBy(() -> shortUrlRepository.saveAndFlush(createShortUrl("same-key", false, null)))
+                .isInstanceOf(DataIntegrityViolationException.class);
     }
 
     private ShortUrl createShortUrl(String shortKey, boolean isPrivate, Instant expiresAt) {

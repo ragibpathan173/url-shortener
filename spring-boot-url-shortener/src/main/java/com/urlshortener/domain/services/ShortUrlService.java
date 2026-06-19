@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -97,7 +98,14 @@ public class ShortUrlService {
         }
         shortUrl.setClickCount(0L);
         shortUrl.setCreatedAt(Instant.now());
-        shortUrlRepository.save(shortUrl);
+        try {
+            shortUrlRepository.saveAndFlush(shortUrl);
+        } catch (DataIntegrityViolationException ex) {
+            if (cmd.customAlias() != null) {
+                throw new ShortKeyAlreadyExistsException(cmd.customAlias());
+            }
+            throw ex;
+        }
         return entityMapper.toShortUrlDto(shortUrl);
     }
 
