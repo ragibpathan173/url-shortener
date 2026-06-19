@@ -7,47 +7,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My URLs</title>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const selectAllCheckbox = document.getElementById('selectAll');
-            const urlCheckboxes = document.querySelectorAll('.url-checkbox');
-            const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
-            const deleteForm = document.getElementById('deleteForm');
-
-            // Handle "Select All" checkbox
-            selectAllCheckbox.addEventListener('change', function() {
-                const isChecked = this.checked;
-                urlCheckboxes.forEach(checkbox => {
-                    checkbox.checked = isChecked;
-                });
-                updateDeleteButtonState();
-            });
-
-            // Handle individual checkboxes
-            urlCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    updateDeleteButtonState();
-
-                    // Update "Select All" checkbox state
-                    const allChecked = Array.from(urlCheckboxes).every(cb => cb.checked);
-                    selectAllCheckbox.checked = allChecked;
-                });
-            });
-
-            // Handle delete button click
-            deleteSelectedBtn.addEventListener('click', function() {
-                if (confirm('Are you sure you want to delete the selected URLs? This action cannot be undone.')) {
-                    deleteForm.submit();
-                }
-            });
-
-            // Update delete button state based on selection
-            function updateDeleteButtonState() {
-                const anyChecked = Array.from(urlCheckboxes).some(cb => cb.checked);
-                deleteSelectedBtn.disabled = !anyChecked;
-            }
-        });
-    </script>
 </head>
 <body>
     <div layout:fragment="content">
@@ -57,21 +16,26 @@
                 <h2>My shortened URLs</h2>
             </div>
         </div>
-        <div th:if="${shortUrls.data.isEmpty()}" class="alert alert-info app-alert">
-            You haven't created any short URLs yet.
+        <div th:if="${shortUrls.data.isEmpty()}" class="app-empty-state">
+            <span class="section-kicker">Your workspace</span>
+            <h3>No saved links yet</h3>
+            <p>Short URLs you create while signed in will stay here, ready to copy, open, or manage.</p>
+            <a class="hero-action hero-action-primary" th:href="@{/#create-short-url}">Create a short URL</a>
         </div>
         <div th:unless="${shortUrls.data.isEmpty()}" class="table-responsive app-table-wrap">
             <form id="deleteForm" th:action="@{/delete-urls}" method="post">
-                <div class="mb-3">
-                    <button id="deleteSelectedBtn" class="btn btn-danger app-btn-danger" disabled>
+                <div class="my-urls-toolbar">
+                    <p id="selectedUrlsStatus" class="mb-0" aria-live="polite">Select links to manage them.</p>
+                    <button id="deleteSelectedBtn" type="button" class="btn btn-danger app-btn-danger" disabled>
                         Delete Selected
                     </button>
                 </div>
-                <table class="table table-hover app-table">
+                <table class="table table-hover app-table my-urls-table">
                     <thead>
                         <tr>
                             <th>
-                                <input type="checkbox" id="selectAll" class="form-check-input">
+                                <input type="checkbox" id="selectAll" class="form-check-input"
+                                       aria-label="Select all URLs">
                             </th>
                             <th>Short URL</th>
                             <th>Original URL</th>
@@ -79,13 +43,15 @@
                             <th>Expires</th>
                             <th>Private</th>
                             <th>Clicks</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="url : ${shortUrls.data}">
                             <td>
                                 <input type="checkbox" name="ids" th:value="${url.id}"
-                                       class="form-check-input url-checkbox">
+                                       class="form-check-input url-checkbox"
+                                       th:attr="aria-label=${'Select ' + url.shortKey}">
                             </td>
                             <td>
                                 <a th:href="@{/s/{key}(key=${url.shortKey})}"
@@ -104,6 +70,20 @@
                                 <span th:unless="${url.private}" class="badge app-badge app-badge-success">Public</span>
                             </td>
                             <td th:text="${url.clickCount}"></td>
+                            <td>
+                                <div class="my-url-actions">
+                                    <button type="button" class="btn app-copy-btn"
+                                            th:attr="data-copy-url=${baseUrl + '/s/' + url.shortKey}">
+                                        Copy
+                                    </button>
+                                    <a class="hero-action hero-action-secondary"
+                                       th:href="@{/s/{key}(key=${url.shortKey})}"
+                                       target="_blank"
+                                       rel="noopener">
+                                        Open
+                                    </a>
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

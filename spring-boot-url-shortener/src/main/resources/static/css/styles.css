@@ -728,6 +728,35 @@ input:focus-visible {
     color: #ffffff;
 }
 
+.my-urls-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.8rem 0.85rem 1rem;
+}
+
+.my-urls-toolbar p {
+    color: rgba(255, 255, 255, 0.62);
+}
+
+.my-urls-table {
+    min-width: 960px;
+}
+
+.my-url-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.my-url-actions .app-copy-btn,
+.my-url-actions .hero-action {
+    min-height: 2.5rem;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.85rem;
+}
+
 .app-empty-state {
     display: flex;
     flex-direction: column;
@@ -950,5 +979,10 @@ input:focus-visible {
     .app-table th,
     .app-table td {
         padding: 0.85rem 0.7rem;
+    }
+
+    .my-urls-toolbar {
+        align-items: stretch;
+        flex-direction: column;
     }
 }

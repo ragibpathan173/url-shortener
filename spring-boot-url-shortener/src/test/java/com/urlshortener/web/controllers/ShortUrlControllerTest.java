@@ -111,6 +111,25 @@ class ShortUrlControllerTest {
                 .andExpect(flash().attribute("shortUrlOriginalUrl", "https://example.com/my-page"));
     }
 
+    @Test
+    void myUrlsPageIncludesTheCurrentUsersLinks() throws Exception {
+        Long userId = 7L;
+        PagedResult<ShortUrlDto> urls = new PagedResult<>(
+                List.of(), 1, 0, 0, true, true, false, false
+        );
+
+        when(securityUtils.getCurrentUserId()).thenReturn(userId);
+        when(properties.pageSize()).thenReturn(10);
+        when(properties.baseUrl()).thenReturn("http://localhost:8080");
+        when(shortUrlService.getUserShortUrls(userId, 1, 10)).thenReturn(urls);
+
+        mockMvc.perform(get("/my-urls"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("my-urls"))
+                .andExpect(model().attribute("shortUrls", urls))
+                .andExpect(model().attribute("baseUrl", "http://localhost:8080"));
+    }
+
     private void mockPublicUrls() {
         when(properties.pageSize()).thenReturn(10);
         when(shortUrlService.findAllPublicShortUrls(1, 10)).thenReturn(
