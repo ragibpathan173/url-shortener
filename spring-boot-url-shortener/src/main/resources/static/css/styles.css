@@ -741,7 +741,7 @@ input:focus-visible {
 }
 
 .my-urls-table {
-    min-width: 960px;
+    min-width: 1040px;
 }
 
 .my-url-actions {
@@ -755,6 +755,12 @@ input:focus-visible {
     min-height: 2.5rem;
     padding: 0.65rem 0.9rem;
     font-size: 0.85rem;
+}
+
+.my-url-action-note {
+    color: rgba(255, 255, 255, 0.46);
+    font-size: 0.85rem;
+    font-weight: 700;
 }
 
 .app-empty-state {
@@ -845,6 +851,11 @@ input:focus-visible {
 .app-badge-success {
     background: rgba(47, 133, 90, 0.14);
     color: var(--app-success);
+}
+
+.app-badge-warning {
+    background: rgba(245, 158, 11, 0.16);
+    color: #fcd34d;
 }
 
 .app-alert {

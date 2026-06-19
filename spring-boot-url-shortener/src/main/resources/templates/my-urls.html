@@ -41,6 +41,7 @@
                             <th>Original URL</th>
                             <th>Created</th>
                             <th>Expires</th>
+                            <th>Status</th>
                             <th>Private</th>
                             <th>Clicks</th>
                             <th>Actions</th>
@@ -66,12 +67,16 @@
                             <td th:text="${#temporals.format(url.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
                             <td th:text="${url.expiresAt != null ? #temporals.format(url.expiresAt, 'yyyy-MM-dd HH:mm') : 'Never'}"></td>
                             <td>
+                                <span th:if="${url.expired}" class="badge app-badge app-badge-warning">Expired</span>
+                                <span th:unless="${url.expired}" class="badge app-badge app-badge-success">Active</span>
+                            </td>
+                            <td>
                                 <span th:if="${url.private}" class="badge app-badge app-badge-muted">Private</span>
                                 <span th:unless="${url.private}" class="badge app-badge app-badge-success">Public</span>
                             </td>
                             <td th:text="${url.clickCount}"></td>
                             <td>
-                                <div class="my-url-actions">
+                                <div class="my-url-actions" th:unless="${url.expired}">
                                     <button type="button" class="btn app-copy-btn"
                                             th:attr="data-copy-url=${baseUrl + '/s/' + url.shortKey}">
                                         Copy
@@ -83,6 +88,7 @@
                                         Open
                                     </a>
                                 </div>
+                                <span class="my-url-action-note" th:if="${url.expired}">Unavailable</span>
                             </td>
                         </tr>
                     </tbody>

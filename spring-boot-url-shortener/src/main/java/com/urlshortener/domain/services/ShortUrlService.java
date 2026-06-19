@@ -107,7 +107,7 @@ public class ShortUrlService {
             return Optional.empty();
         }
         ShortUrl shortUrl = shortUrlOptional.get();
-        if(shortUrl.getExpiresAt() != null && shortUrl.getExpiresAt().isBefore(Instant.now())) {
+        if(shortUrl.getExpiresAt() != null && !shortUrl.getExpiresAt().isAfter(Instant.now())) {
             return Optional.empty();
         }
         if(shortUrl.getIsPrivate() != null && shortUrl.getIsPrivate()

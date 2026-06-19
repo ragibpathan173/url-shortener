@@ -10,4 +10,8 @@ public record ShortUrlDto(Long id, String shortKey, String originalUrl,
                           Boolean isPrivate, Instant expiresAt,
                           UserDto createdBy, Long clickCount,
                           Instant createdAt) implements Serializable {
+
+    public boolean isExpired() {
+        return expiresAt != null && !expiresAt.isAfter(Instant.now());
+    }
 }

@@ -12,8 +12,10 @@ import java.util.Optional;
 
 public interface ShortUrlRepository extends JpaRepository<ShortUrl, Long> {
     @Query(
-            value = "select su from ShortUrl su left join fetch su.createdBy where su.isPrivate = false",
-            countQuery = "select count(su) from ShortUrl su where su.isPrivate = false"
+            value = "select su from ShortUrl su left join fetch su.createdBy " +
+                    "where su.isPrivate = false and (su.expiresAt is null or su.expiresAt > CURRENT_TIMESTAMP)",
+            countQuery = "select count(su) from ShortUrl su " +
+                    "where su.isPrivate = false and (su.expiresAt is null or su.expiresAt > CURRENT_TIMESTAMP)"
     )
     Page<ShortUrl> findPublicShortUrls(Pageable pageable);
 
