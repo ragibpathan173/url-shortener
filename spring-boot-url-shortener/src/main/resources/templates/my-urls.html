@@ -16,6 +16,20 @@
                 <h2>My shortened URLs</h2>
             </div>
         </div>
+        <section class="url-summary-grid" aria-label="Link summary">
+            <article class="url-summary-card">
+                <span>Saved links</span>
+                <strong th:text="${urlSummary.totalLinks}">0</strong>
+            </article>
+            <article class="url-summary-card">
+                <span>Active links</span>
+                <strong th:text="${urlSummary.activeLinks}">0</strong>
+            </article>
+            <article class="url-summary-card">
+                <span>Total clicks</span>
+                <strong th:text="${urlSummary.totalClicks}">0</strong>
+            </article>
+        </section>
         <div th:if="${shortUrls.data.isEmpty()}" class="app-empty-state">
             <span class="section-kicker">Your workspace</span>
             <h3>No saved links yet</h3>

@@ -117,6 +117,7 @@ public class ShortUrlController {
         PagedResult<ShortUrlDto> myUrls =
                 shortUrlService.getUserShortUrls(currentUserId, page, properties.pageSize());
         model.addAttribute("shortUrls", myUrls);
+        model.addAttribute("urlSummary", shortUrlService.getUserUrlSummary(currentUserId));
         model.addAttribute("baseUrl", properties.baseUrl());
         model.addAttribute("paginationUrl", "/my-urls");
         return "my-urls";

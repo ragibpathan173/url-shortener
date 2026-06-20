@@ -6,6 +6,7 @@ import com.urlshortener.domain.exceptions.ShortKeyAlreadyExistsException;
 import com.urlshortener.domain.models.CreateShortUrlCmd;
 import com.urlshortener.domain.models.PagedResult;
 import com.urlshortener.domain.models.ShortUrlDto;
+import com.urlshortener.domain.models.UserUrlSummary;
 import com.urlshortener.domain.services.ShortUrlService;
 import com.urlshortener.web.GlobalExceptionHandler;
 import org.junit.jupiter.api.Test;
@@ -147,16 +148,19 @@ class ShortUrlControllerTest {
         PagedResult<ShortUrlDto> urls = new PagedResult<>(
                 List.of(), 1, 0, 0, true, true, false, false
         );
+        UserUrlSummary summary = new UserUrlSummary(0L, 0L, 0L);
 
         when(securityUtils.getCurrentUserId()).thenReturn(userId);
         when(properties.pageSize()).thenReturn(10);
         when(properties.baseUrl()).thenReturn("http://localhost:8080");
         when(shortUrlService.getUserShortUrls(userId, 1, 10)).thenReturn(urls);
+        when(shortUrlService.getUserUrlSummary(userId)).thenReturn(summary);
 
         mockMvc.perform(get("/my-urls"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("my-urls"))
                 .andExpect(model().attribute("shortUrls", urls))
+                .andExpect(model().attribute("urlSummary", summary))
                 .andExpect(model().attribute("baseUrl", "http://localhost:8080"));
     }
 

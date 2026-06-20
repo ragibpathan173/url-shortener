@@ -750,6 +750,42 @@ input:focus-visible {
     min-width: 1040px;
 }
 
+.url-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.9rem;
+    margin: 1.25rem 0;
+}
+
+.url-summary-card {
+    min-height: 7.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--app-glass-border);
+    border-radius: var(--app-radius-lg);
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+        rgba(8, 10, 16, 0.72);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
+}
+
+.url-summary-card span {
+    color: rgba(255, 255, 255, 0.56);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.url-summary-card strong {
+    color: #ffffff;
+    font-family: "Instrument Serif", Georgia, "Times New Roman", serif;
+    font-size: 2.5rem;
+    line-height: 1;
+}
+
 .app-card .app-alias-input .input-group-text {
     min-width: 0;
     border-color: rgba(255, 255, 255, 0.14);
@@ -1019,5 +1055,9 @@ input:focus-visible {
     .my-urls-toolbar {
         align-items: stretch;
         flex-direction: column;
+    }
+
+    .url-summary-grid {
+        grid-template-columns: 1fr;
     }
 }

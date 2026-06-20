@@ -7,6 +7,7 @@ import com.urlshortener.domain.exceptions.ShortKeyAlreadyExistsException;
 import com.urlshortener.domain.models.CreateShortUrlCmd;
 import com.urlshortener.domain.models.PagedResult;
 import com.urlshortener.domain.models.ShortUrlDto;
+import com.urlshortener.domain.models.UserUrlSummary;
 import com.urlshortener.domain.repositories.ShortUrlRepository;
 import com.urlshortener.domain.repositories.UserRepository;
 import org.springframework.data.domain.Page;
@@ -55,6 +56,10 @@ public class ShortUrlService {
         var shortUrlsPage = shortUrlRepository.findByCreatedById(userId, pageable)
                 .map(entityMapper::toShortUrlDto);
         return PagedResult.from(shortUrlsPage);
+    }
+
+    public UserUrlSummary getUserUrlSummary(Long userId) {
+        return shortUrlRepository.getUserUrlSummary(userId);
     }
 
     @Transactional
