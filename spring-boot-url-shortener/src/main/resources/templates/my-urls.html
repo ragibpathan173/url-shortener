@@ -30,11 +30,43 @@
                 <strong th:text="${urlSummary.totalClicks}">0</strong>
             </article>
         </section>
+        <form class="my-urls-filters" method="get" th:action="@{/my-urls}">
+            <div class="my-urls-search">
+                <label class="visually-hidden" for="linkSearch">Search saved links</label>
+                <input id="linkSearch" class="form-control" type="search" name="search"
+                       th:value="${search}"
+                       placeholder="Search by short link or destination URL">
+            </div>
+            <fieldset class="my-urls-status-filter">
+                <legend class="visually-hidden">Link status</legend>
+                <input class="btn-check" type="radio" name="status" id="statusAll" value="ALL"
+                       th:checked="${status == 'ALL'}">
+                <label class="btn" for="statusAll">All</label>
+                <input class="btn-check" type="radio" name="status" id="statusActive" value="ACTIVE"
+                       th:checked="${status == 'ACTIVE'}">
+                <label class="btn" for="statusActive">Active</label>
+                <input class="btn-check" type="radio" name="status" id="statusExpired" value="EXPIRED"
+                       th:checked="${status == 'EXPIRED'}">
+                <label class="btn" for="statusExpired">Expired</label>
+            </fieldset>
+            <div class="my-urls-filter-actions">
+                <button type="submit" class="hero-action hero-action-primary">Apply</button>
+                <a class="hero-action hero-action-secondary" th:href="@{/my-urls}">Clear</a>
+            </div>
+        </form>
         <div th:if="${shortUrls.data.isEmpty()}" class="app-empty-state">
-            <span class="section-kicker">Your workspace</span>
-            <h3>No saved links yet</h3>
-            <p>Short URLs you create while signed in will stay here, ready to copy, open, or manage.</p>
-            <a class="hero-action hero-action-primary" th:href="@{/#create-short-url}">Create a short URL</a>
+            <div th:if="${urlSummary.totalLinks == 0}">
+                <span class="section-kicker">Your workspace</span>
+                <h3>No saved links yet</h3>
+                <p>Short URLs you create while signed in will stay here, ready to copy, open, or manage.</p>
+                <a class="hero-action hero-action-primary" th:href="@{/#create-short-url}">Create a short URL</a>
+            </div>
+            <div th:unless="${urlSummary.totalLinks == 0}">
+                <span class="section-kicker">No matches</span>
+                <h3>No links match this view</h3>
+                <p>Try a different search phrase or switch the status filter.</p>
+                <a class="hero-action hero-action-secondary" th:href="@{/my-urls}">Clear filters</a>
+            </div>
         </div>
         <div th:unless="${shortUrls.data.isEmpty()}" class="table-responsive app-table-wrap">
             <form id="deleteForm" th:action="@{/delete-urls}" method="post">

@@ -60,6 +60,25 @@ class ShortUrlRepositoryTest {
         assertThat(summary.totalClicks()).isEqualTo(18L);
     }
 
+    @Test
+    void searchesUsersLinksAndFiltersByExpiryStatus() {
+        User user = userRepository.save(createUser());
+        ShortUrl activeLink = createShortUrl("active03", false, Instant.now().plusSeconds(3600), user, 0L);
+        activeLink.setOriginalUrl("https://example.com/spring-dashboard");
+        shortUrlRepository.save(activeLink);
+        shortUrlRepository.save(createShortUrl("expired03", false, Instant.now().minusSeconds(3600), user, 0L));
+
+        var activeMatches = shortUrlRepository.searchUserShortUrls(
+                user.getId(), "dashboard", true, false, PageRequest.of(0, 10)
+        );
+        var expiredLinks = shortUrlRepository.searchUserShortUrls(
+                user.getId(), null, false, true, PageRequest.of(0, 10)
+        );
+
+        assertThat(activeMatches.getContent()).extracting(ShortUrl::getShortKey).containsExactly("active03");
+        assertThat(expiredLinks.getContent()).extracting(ShortUrl::getShortKey).containsExactly("expired03");
+    }
+
     private ShortUrl createShortUrl(String shortKey, boolean isPrivate, Instant expiresAt) {
         return createShortUrl(shortKey, isPrivate, expiresAt, null, 0L);
     }

@@ -29,6 +29,8 @@ public class AdminController {
         model.addAttribute("shortUrls", allUrls);
         model.addAttribute("baseUrl", properties.baseUrl());
         model.addAttribute("paginationUrl", "/admin/dashboard");
+        model.addAttribute("search", null);
+        model.addAttribute("status", null);
         return "admin-dashboard";
     }
 }

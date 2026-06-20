@@ -4,6 +4,7 @@ import com.urlshortener.ApplicationProperties;
 import com.urlshortener.domain.exceptions.InvalidOriginalUrlException;
 import com.urlshortener.domain.exceptions.ShortKeyAlreadyExistsException;
 import com.urlshortener.domain.models.CreateShortUrlCmd;
+import com.urlshortener.domain.models.LinkStatusFilter;
 import com.urlshortener.domain.models.PagedResult;
 import com.urlshortener.domain.models.ShortUrlDto;
 import com.urlshortener.domain.models.UserUrlSummary;
@@ -153,15 +154,20 @@ class ShortUrlControllerTest {
         when(securityUtils.getCurrentUserId()).thenReturn(userId);
         when(properties.pageSize()).thenReturn(10);
         when(properties.baseUrl()).thenReturn("http://localhost:8080");
-        when(shortUrlService.getUserShortUrls(userId, 1, 10)).thenReturn(urls);
+        when(shortUrlService.getUserShortUrls(userId, 1, 10, "dashboard", LinkStatusFilter.ACTIVE))
+                .thenReturn(urls);
         when(shortUrlService.getUserUrlSummary(userId)).thenReturn(summary);
 
-        mockMvc.perform(get("/my-urls"))
+        mockMvc.perform(get("/my-urls")
+                        .param("search", "dashboard")
+                        .param("status", "active"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("my-urls"))
                 .andExpect(model().attribute("shortUrls", urls))
                 .andExpect(model().attribute("urlSummary", summary))
-                .andExpect(model().attribute("baseUrl", "http://localhost:8080"));
+                .andExpect(model().attribute("baseUrl", "http://localhost:8080"))
+                .andExpect(model().attribute("search", "dashboard"))
+                .andExpect(model().attribute("status", "ACTIVE"));
     }
 
     private void mockPublicUrls() {

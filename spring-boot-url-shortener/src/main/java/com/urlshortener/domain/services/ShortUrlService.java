@@ -5,6 +5,7 @@ import com.urlshortener.domain.entities.ShortUrl;
 import com.urlshortener.domain.exceptions.InvalidOriginalUrlException;
 import com.urlshortener.domain.exceptions.ShortKeyAlreadyExistsException;
 import com.urlshortener.domain.models.CreateShortUrlCmd;
+import com.urlshortener.domain.models.LinkStatusFilter;
 import com.urlshortener.domain.models.PagedResult;
 import com.urlshortener.domain.models.ShortUrlDto;
 import com.urlshortener.domain.models.UserUrlSummary;
@@ -51,9 +52,24 @@ public class ShortUrlService {
         return PagedResult.from(shortUrlDtoPage);
     }
 
-    public PagedResult<ShortUrlDto> getUserShortUrls(Long userId, int page, int pageSize) {
+    public PagedResult<ShortUrlDto> getUserShortUrls(
+            Long userId,
+            int page,
+            int pageSize,
+            String search,
+            LinkStatusFilter statusFilter
+    ) {
         Pageable pageable = getPageable(page, pageSize);
-        var shortUrlsPage = shortUrlRepository.findByCreatedById(userId, pageable)
+        String normalizedSearch = search == null || search.isBlank() ? null : search.trim();
+        boolean includeActive = statusFilter != LinkStatusFilter.EXPIRED;
+        boolean includeExpired = statusFilter != LinkStatusFilter.ACTIVE;
+        var shortUrlsPage = shortUrlRepository.searchUserShortUrls(
+                        userId,
+                        normalizedSearch,
+                        includeActive,
+                        includeExpired,
+                        pageable
+                )
                 .map(entityMapper::toShortUrlDto);
         return PagedResult.from(shortUrlsPage);
     }

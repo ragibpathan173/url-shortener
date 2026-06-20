@@ -5,6 +5,7 @@ import com.urlshortener.domain.exceptions.InvalidOriginalUrlException;
 import com.urlshortener.domain.exceptions.ShortKeyAlreadyExistsException;
 import com.urlshortener.domain.exceptions.ShortUrlNotFoundException;
 import com.urlshortener.domain.models.CreateShortUrlCmd;
+import com.urlshortener.domain.models.LinkStatusFilter;
 import com.urlshortener.domain.models.PagedResult;
 import com.urlshortener.domain.models.ShortUrlDto;
 import com.urlshortener.domain.services.ShortUrlService;
@@ -49,6 +50,8 @@ public class ShortUrlController {
         model.addAttribute("shortUrls", shortUrls);
         model.addAttribute("baseUrl", properties.baseUrl());
         model.addAttribute("paginationUrl", "/");
+        model.addAttribute("search", null);
+        model.addAttribute("status", null);
     }
 
     @PostMapping("/short-urls")
@@ -112,14 +115,26 @@ public class ShortUrlController {
     @GetMapping("/my-urls")
     public String showUserUrls(
             @RequestParam(defaultValue = "1") int page,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String status,
             Model model) {
         var currentUserId = securityUtils.getCurrentUserId();
+        var statusFilter = LinkStatusFilter.from(status);
+        String normalizedSearch = search == null || search.isBlank() ? null : search.trim();
         PagedResult<ShortUrlDto> myUrls =
-                shortUrlService.getUserShortUrls(currentUserId, page, properties.pageSize());
+                shortUrlService.getUserShortUrls(
+                        currentUserId,
+                        page,
+                        properties.pageSize(),
+                        normalizedSearch,
+                        statusFilter
+                );
         model.addAttribute("shortUrls", myUrls);
         model.addAttribute("urlSummary", shortUrlService.getUserUrlSummary(currentUserId));
         model.addAttribute("baseUrl", properties.baseUrl());
         model.addAttribute("paginationUrl", "/my-urls");
+        model.addAttribute("search", normalizedSearch);
+        model.addAttribute("status", statusFilter.name());
         return "my-urls";
     }
 

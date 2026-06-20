@@ -786,6 +786,66 @@ input:focus-visible {
     line-height: 1;
 }
 
+.my-urls-filters {
+    display: grid;
+    grid-template-columns: minmax(16rem, 1fr) auto auto;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 1.25rem 0;
+}
+
+.my-urls-search .form-control {
+    min-height: 2.85rem;
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.my-urls-search .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.42);
+}
+
+.my-urls-status-filter {
+    display: inline-flex;
+    gap: 0.2rem;
+    margin: 0;
+    padding: 0.28rem;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.my-urls-status-filter .btn {
+    border: 0;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 0.84rem;
+    font-weight: 700;
+    padding: 0.55rem 0.85rem;
+}
+
+.my-urls-status-filter .btn:hover {
+    color: #ffffff;
+}
+
+.my-urls-status-filter .btn-check:checked + .btn {
+    color: #04110f;
+    background: #bffcf2;
+    box-shadow: none;
+}
+
+.my-urls-filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.my-urls-filter-actions .hero-action {
+    min-height: 2.85rem;
+    padding: 0.68rem 1rem;
+    font-size: 0.85rem;
+}
+
 .app-card .app-alias-input .input-group-text {
     min-width: 0;
     border-color: rgba(255, 255, 255, 0.14);
@@ -860,6 +920,13 @@ input:focus-visible {
 
 .app-empty-state .hero-action {
     align-self: flex-start;
+}
+
+.app-empty-state > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.95rem;
 }
 
 .error-panel {
@@ -1059,5 +1126,21 @@ input:focus-visible {
 
     .url-summary-grid {
         grid-template-columns: 1fr;
+    }
+
+    .my-urls-filters {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+    }
+
+    .my-urls-status-filter,
+    .my-urls-filter-actions {
+        width: 100%;
+    }
+
+    .my-urls-status-filter .btn,
+    .my-urls-filter-actions .hero-action {
+        flex: 1;
+        text-align: center;
     }
 }
