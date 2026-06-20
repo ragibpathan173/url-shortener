@@ -31,6 +31,7 @@ public class AdminController {
         model.addAttribute("paginationUrl", "/admin/dashboard");
         model.addAttribute("search", null);
         model.addAttribute("status", null);
+        model.addAttribute("sort", null);
         return "admin-dashboard";
     }
 }

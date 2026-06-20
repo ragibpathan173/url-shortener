@@ -49,6 +49,14 @@
                        th:checked="${status == 'EXPIRED'}">
                 <label class="btn" for="statusExpired">Expired</label>
             </fieldset>
+            <div class="my-urls-sort">
+                <label class="visually-hidden" for="linkSort">Sort saved links</label>
+                <select id="linkSort" class="form-select" name="sort">
+                    <option value="NEWEST" th:selected="${sort == 'NEWEST'}">Newest first</option>
+                    <option value="OLDEST" th:selected="${sort == 'OLDEST'}">Oldest first</option>
+                    <option value="MOST_CLICKED" th:selected="${sort == 'MOST_CLICKED'}">Most clicked</option>
+                </select>
+            </div>
             <div class="my-urls-filter-actions">
                 <button type="submit" class="hero-action hero-action-primary">Apply</button>
                 <a class="hero-action hero-action-secondary" th:href="@{/my-urls}">Clear</a>

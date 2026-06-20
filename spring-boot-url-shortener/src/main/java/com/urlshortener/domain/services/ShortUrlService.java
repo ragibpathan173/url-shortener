@@ -5,6 +5,7 @@ import com.urlshortener.domain.entities.ShortUrl;
 import com.urlshortener.domain.exceptions.InvalidOriginalUrlException;
 import com.urlshortener.domain.exceptions.ShortKeyAlreadyExistsException;
 import com.urlshortener.domain.models.CreateShortUrlCmd;
+import com.urlshortener.domain.models.LinkSortOption;
 import com.urlshortener.domain.models.LinkStatusFilter;
 import com.urlshortener.domain.models.PagedResult;
 import com.urlshortener.domain.models.ShortUrlDto;
@@ -57,12 +58,15 @@ public class ShortUrlService {
             int page,
             int pageSize,
             String search,
-            LinkStatusFilter statusFilter
+            LinkStatusFilter statusFilter,
+            LinkSortOption sortOption
     ) {
-        Pageable pageable = getPageable(page, pageSize);
+        LinkStatusFilter effectiveStatusFilter = statusFilter == null ? LinkStatusFilter.ALL : statusFilter;
+        LinkSortOption effectiveSortOption = sortOption == null ? LinkSortOption.NEWEST : sortOption;
+        Pageable pageable = getPageable(page, pageSize, effectiveSortOption);
         String normalizedSearch = search == null || search.isBlank() ? null : search.trim();
-        boolean includeActive = statusFilter != LinkStatusFilter.EXPIRED;
-        boolean includeExpired = statusFilter != LinkStatusFilter.ACTIVE;
+        boolean includeActive = effectiveStatusFilter != LinkStatusFilter.EXPIRED;
+        boolean includeExpired = effectiveStatusFilter != LinkStatusFilter.ACTIVE;
         var shortUrlsPage = shortUrlRepository.searchUserShortUrls(
                         userId,
                         normalizedSearch,
@@ -92,8 +96,18 @@ public class ShortUrlService {
     }
 
     private Pageable getPageable(int page, int size) {
+        return getPageable(page, size, LinkSortOption.NEWEST);
+    }
+
+    private Pageable getPageable(int page, int size, LinkSortOption sortOption) {
         page = page > 1 ? page - 1: 0;
-        return PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+        Sort sort = switch (sortOption) {
+            case NEWEST -> Sort.by(Sort.Direction.DESC, "createdAt");
+            case OLDEST -> Sort.by(Sort.Direction.ASC, "createdAt");
+            case MOST_CLICKED -> Sort.by(Sort.Direction.DESC, "clickCount")
+                    .and(Sort.by(Sort.Direction.DESC, "createdAt"));
+        };
+        return PageRequest.of(page, size, sort);
     }
 
     @Transactional

@@ -5,6 +5,7 @@ import com.urlshortener.domain.exceptions.InvalidOriginalUrlException;
 import com.urlshortener.domain.exceptions.ShortKeyAlreadyExistsException;
 import com.urlshortener.domain.exceptions.ShortUrlNotFoundException;
 import com.urlshortener.domain.models.CreateShortUrlCmd;
+import com.urlshortener.domain.models.LinkSortOption;
 import com.urlshortener.domain.models.LinkStatusFilter;
 import com.urlshortener.domain.models.PagedResult;
 import com.urlshortener.domain.models.ShortUrlDto;
@@ -52,6 +53,7 @@ public class ShortUrlController {
         model.addAttribute("paginationUrl", "/");
         model.addAttribute("search", null);
         model.addAttribute("status", null);
+        model.addAttribute("sort", null);
     }
 
     @PostMapping("/short-urls")
@@ -117,9 +119,11 @@ public class ShortUrlController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String status,
+            @RequestParam(required = false) String sort,
             Model model) {
         var currentUserId = securityUtils.getCurrentUserId();
         var statusFilter = LinkStatusFilter.from(status);
+        var sortOption = LinkSortOption.from(sort);
         String normalizedSearch = search == null || search.isBlank() ? null : search.trim();
         PagedResult<ShortUrlDto> myUrls =
                 shortUrlService.getUserShortUrls(
@@ -127,7 +131,8 @@ public class ShortUrlController {
                         page,
                         properties.pageSize(),
                         normalizedSearch,
-                        statusFilter
+                        statusFilter,
+                        sortOption
                 );
         model.addAttribute("shortUrls", myUrls);
         model.addAttribute("urlSummary", shortUrlService.getUserUrlSummary(currentUserId));
@@ -135,6 +140,7 @@ public class ShortUrlController {
         model.addAttribute("paginationUrl", "/my-urls");
         model.addAttribute("search", normalizedSearch);
         model.addAttribute("status", statusFilter.name());
+        model.addAttribute("sort", sortOption.name());
         return "my-urls";
     }
 
