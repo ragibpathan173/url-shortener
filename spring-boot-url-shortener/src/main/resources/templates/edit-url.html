@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit short link</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="app-card app-card-highlight edit-link-card mt-5">
+        <div class="app-card-header edit-link-header">
+            <div>
+                <span class="section-kicker">Link settings</span>
+                <h1 class="card-title">Edit short link</h1>
+            </div>
+            <a class="hero-action hero-action-secondary" th:href="@{/my-urls}">Back to My URLs</a>
+        </div>
+        <div class="app-card-body">
+            <div class="edit-link-address">
+                <span>Short link</span>
+                <strong th:text="${baseUrl + '/s/' + shortUrl.shortKey}">http://localhost:8080/s/example</strong>
+            </div>
+            <form class="app-form edit-link-form" method="post"
+                  th:action="@{/my-urls/{id}/edit(id=${shortUrl.id})}"
+                  th:object="${updateShortUrlForm}">
+                <div>
+                    <label class="form-label" for="originalUrl">Destination URL</label>
+                    <input id="originalUrl" class="form-control" type="url" th:field="*{originalUrl}"
+                           placeholder="https://example.com/your-page"
+                           th:classappend="${#fields.hasErrors('originalUrl')} ? 'is-invalid' : ''">
+                    <p class="form-error" th:if="${#fields.hasErrors('originalUrl')}"
+                       th:errors="*{originalUrl}"></p>
+                </div>
+                <div class="edit-link-options">
+                    <div class="form-check form-switch">
+                        <input id="isPrivate" class="form-check-input" type="checkbox" role="switch"
+                               th:field="*{isPrivate}">
+                        <label class="form-check-label" for="isPrivate">Private link</label>
+                        <p class="form-text">Only your account can open private links.</p>
+                    </div>
+                    <div>
+                        <label class="form-label" for="expiresOn">Expiry date <span class="form-label-optional">optional</span></label>
+                        <input id="expiresOn" class="form-control" type="date" th:field="*{expiresOn}"
+                               th:classappend="${#fields.hasErrors('expiresOn')} ? 'is-invalid' : ''">
+                        <p class="form-text">Leave blank to keep this link active indefinitely.</p>
+                        <p class="form-error" th:if="${#fields.hasErrors('expiresOn')}"
+                           th:errors="*{expiresOn}"></p>
+                    </div>
+                </div>
+                <div class="edit-link-actions">
+                    <button class="hero-action hero-action-primary" type="submit">Save changes</button>
+                    <a class="hero-action hero-action-secondary" th:href="@{/my-urls}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+</body>
+</html>

@@ -9,6 +9,7 @@ import com.urlshortener.domain.models.LinkStatusFilter;
 import com.urlshortener.domain.models.PagedResult;
 import com.urlshortener.domain.models.ShortUrlDto;
 import com.urlshortener.domain.models.UserUrlSummary;
+import com.urlshortener.domain.models.UpdateShortUrlCmd;
 import com.urlshortener.domain.services.ShortUrlService;
 import com.urlshortener.web.GlobalExceptionHandler;
 import org.junit.jupiter.api.Test;
@@ -173,6 +174,45 @@ class ShortUrlControllerTest {
                 .andExpect(model().attribute("search", "dashboard"))
                 .andExpect(model().attribute("status", "ACTIVE"))
                 .andExpect(model().attribute("sort", "MOST_CLICKED"));
+    }
+
+    @Test
+    void editUrlPageShowsOnlyTheCurrentUsersLink() throws Exception {
+        Long userId = 7L;
+        ShortUrlDto shortUrl = new ShortUrlDto(
+                4L, "edit001", "https://example.com/current", false,
+                Instant.parse("2026-07-20T00:00:00Z"), null, 2L, Instant.now()
+        );
+
+        when(securityUtils.getCurrentUserId()).thenReturn(userId);
+        when(properties.baseUrl()).thenReturn("http://localhost:8080");
+        when(shortUrlService.findUserShortUrl(4L, userId)).thenReturn(Optional.of(shortUrl));
+
+        mockMvc.perform(get("/my-urls/4/edit"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("edit-url"))
+                .andExpect(model().attribute("shortUrl", shortUrl))
+                .andExpect(model().attribute("baseUrl", "http://localhost:8080"));
+    }
+
+    @Test
+    void savesUpdatedLinkSettingsForTheCurrentUser() throws Exception {
+        Long userId = 7L;
+        ShortUrlDto shortUrl = new ShortUrlDto(
+                4L, "edit001", "https://example.com/current", false, null, null, 2L, Instant.now()
+        );
+
+        when(securityUtils.getCurrentUserId()).thenReturn(userId);
+        when(shortUrlService.updateUserShortUrl(any(), any(UpdateShortUrlCmd.class)))
+                .thenReturn(Optional.of(shortUrl));
+
+        mockMvc.perform(post("/my-urls/4/edit")
+                        .param("originalUrl", "https://example.com/updated")
+                        .param("isPrivate", "true")
+                        .param("expiresOn", "2026-07-20"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/my-urls"))
+                .andExpect(flash().attribute("successMessage", "Link settings updated."));
     }
 
     private void mockPublicUrls() {

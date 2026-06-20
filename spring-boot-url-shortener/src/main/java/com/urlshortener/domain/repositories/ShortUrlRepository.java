@@ -24,6 +24,8 @@ public interface ShortUrlRepository extends JpaRepository<ShortUrl, Long> {
 
     Optional<ShortUrl> findByShortKey(String shortKey);
 
+    Optional<ShortUrl> findByIdAndCreatedById(Long id, Long userId);
+
     Page<ShortUrl> findByCreatedById(Long userId, Pageable pageable);
 
     @Query(

@@ -130,19 +130,22 @@
                             </td>
                             <td th:text="${url.clickCount}"></td>
                             <td>
-                                <div class="my-url-actions" th:unless="${url.expired}">
-                                    <button type="button" class="btn app-copy-btn"
+                                <div class="my-url-actions">
+                                    <button th:unless="${url.expired}" type="button" class="btn app-copy-btn"
                                             th:attr="data-copy-url=${baseUrl + '/s/' + url.shortKey}">
                                         Copy
                                     </button>
-                                    <a class="hero-action hero-action-secondary"
+                                    <a th:unless="${url.expired}" class="hero-action hero-action-secondary"
                                        th:href="@{/s/{key}(key=${url.shortKey})}"
                                        target="_blank"
                                        rel="noopener">
                                         Open
                                     </a>
+                                    <a class="hero-action hero-action-secondary"
+                                       th:href="@{/my-urls/{id}/edit(id=${url.id})}">
+                                        Edit
+                                    </a>
                                 </div>
-                                <span class="my-url-action-note" th:if="${url.expired}">Unavailable</span>
                             </td>
                         </tr>
                     </tbody>

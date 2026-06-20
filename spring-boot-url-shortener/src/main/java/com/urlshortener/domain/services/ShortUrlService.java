@@ -9,6 +9,7 @@ import com.urlshortener.domain.models.LinkSortOption;
 import com.urlshortener.domain.models.LinkStatusFilter;
 import com.urlshortener.domain.models.PagedResult;
 import com.urlshortener.domain.models.ShortUrlDto;
+import com.urlshortener.domain.models.UpdateShortUrlCmd;
 import com.urlshortener.domain.models.UserUrlSummary;
 import com.urlshortener.domain.repositories.ShortUrlRepository;
 import com.urlshortener.domain.repositories.UserRepository;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -82,6 +84,15 @@ public class ShortUrlService {
         return shortUrlRepository.getUserUrlSummary(userId);
     }
 
+    public Optional<ShortUrlDto> findUserShortUrl(Long shortUrlId, Long userId) {
+        if (shortUrlId == null || userId == null) {
+            return Optional.empty();
+        }
+
+        return shortUrlRepository.findByIdAndCreatedById(shortUrlId, userId)
+                .map(entityMapper::toShortUrlDto);
+    }
+
     @Transactional
     public void deleteUserShortUrls(List<Long> ids, Long userId) {
         if (ids != null && !ids.isEmpty() && userId != null) {
@@ -97,6 +108,31 @@ public class ShortUrlService {
 
     private Pageable getPageable(int page, int size) {
         return getPageable(page, size, LinkSortOption.NEWEST);
+    }
+
+    @Transactional
+    public Optional<ShortUrlDto> updateUserShortUrl(Long shortUrlId, UpdateShortUrlCmd command) {
+        if (shortUrlId == null || command.userId() == null) {
+            return Optional.empty();
+        }
+
+        Optional<ShortUrl> shortUrlOptional = shortUrlRepository.findByIdAndCreatedById(shortUrlId, command.userId());
+        if (shortUrlOptional.isEmpty()) {
+            return Optional.empty();
+        }
+
+        if (properties.validateOriginalUrl() && !UrlExistenceValidator.isUrlExists(command.originalUrl())) {
+            throw new InvalidOriginalUrlException("Original URL could not be verified: " + command.originalUrl());
+        }
+
+        ShortUrl shortUrl = shortUrlOptional.get();
+        shortUrl.setOriginalUrl(command.originalUrl());
+        shortUrl.setIsPrivate(Boolean.TRUE.equals(command.isPrivate()));
+        shortUrl.setExpiresAt(command.expiresOn() == null
+                ? null
+                : command.expiresOn().atStartOfDay(ZoneOffset.UTC).toInstant());
+        shortUrlRepository.save(shortUrl);
+        return Optional.of(entityMapper.toShortUrlDto(shortUrl));
     }
 
     private Pageable getPageable(int page, int size, LinkSortOption sortOption) {

@@ -9,8 +9,10 @@ import com.urlshortener.domain.models.LinkSortOption;
 import com.urlshortener.domain.models.LinkStatusFilter;
 import com.urlshortener.domain.models.PagedResult;
 import com.urlshortener.domain.models.ShortUrlDto;
+import com.urlshortener.domain.models.UpdateShortUrlCmd;
 import com.urlshortener.domain.services.ShortUrlService;
 import com.urlshortener.web.dtos.CreateShortUrlForm;
+import com.urlshortener.web.dtos.UpdateShortUrlForm;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.ZoneOffset;
 
 @Controller
 public class ShortUrlController {
@@ -142,6 +145,57 @@ public class ShortUrlController {
         model.addAttribute("status", statusFilter.name());
         model.addAttribute("sort", sortOption.name());
         return "my-urls";
+    }
+
+    @GetMapping("/my-urls/{id}/edit")
+    public String showEditUrlForm(@PathVariable Long id, Model model) {
+        var currentUserId = securityUtils.getCurrentUserId();
+        ShortUrlDto shortUrl = addEditUrlData(model, id, currentUserId);
+        model.addAttribute("updateShortUrlForm", new UpdateShortUrlForm(
+                shortUrl.originalUrl(),
+                shortUrl.isPrivate(),
+                shortUrl.expiresAt() == null ? null : shortUrl.expiresAt().atZone(ZoneOffset.UTC).toLocalDate()
+        ));
+        return "edit-url";
+    }
+
+    @PostMapping("/my-urls/{id}/edit")
+    public String updateUrl(
+            @PathVariable Long id,
+            @ModelAttribute("updateShortUrlForm") @Valid UpdateShortUrlForm form,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes,
+            Model model) {
+        var currentUserId = securityUtils.getCurrentUserId();
+        if (bindingResult.hasErrors()) {
+            addEditUrlData(model, id, currentUserId);
+            return "edit-url";
+        }
+
+        try {
+            shortUrlService.updateUserShortUrl(
+                    id,
+                    new UpdateShortUrlCmd(form.originalUrl(), form.isPrivate(), form.expiresOn(), currentUserId)
+            ).orElseThrow(() -> new ShortUrlNotFoundException("Short URL not found: " + id));
+            redirectAttributes.addFlashAttribute("successMessage", "Link settings updated.");
+            return "redirect:/my-urls";
+        } catch (InvalidOriginalUrlException e) {
+            bindingResult.rejectValue(
+                    "originalUrl",
+                    "originalUrl.unverified",
+                    "We could not verify that URL. Check it opens in a browser, then try again."
+            );
+            addEditUrlData(model, id, currentUserId);
+            return "edit-url";
+        }
+    }
+
+    private ShortUrlDto addEditUrlData(Model model, Long shortUrlId, Long currentUserId) {
+        ShortUrlDto shortUrl = shortUrlService.findUserShortUrl(shortUrlId, currentUserId)
+                .orElseThrow(() -> new ShortUrlNotFoundException("Short URL not found: " + shortUrlId));
+        model.addAttribute("shortUrl", shortUrl);
+        model.addAttribute("baseUrl", properties.baseUrl());
+        return shortUrl;
     }
 
     @PostMapping("/delete-urls")

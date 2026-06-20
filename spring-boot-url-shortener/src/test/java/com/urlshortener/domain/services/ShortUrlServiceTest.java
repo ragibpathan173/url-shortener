@@ -8,6 +8,7 @@ import com.urlshortener.domain.models.LinkSortOption;
 import com.urlshortener.domain.models.LinkStatusFilter;
 import com.urlshortener.domain.models.PagedResult;
 import com.urlshortener.domain.models.ShortUrlDto;
+import com.urlshortener.domain.models.UpdateShortUrlCmd;
 import com.urlshortener.domain.repositories.ShortUrlRepository;
 import com.urlshortener.domain.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -121,5 +123,41 @@ class ShortUrlServiceTest {
         assertThat(pageableCaptor.getValue().getSort().getOrderFor("clickCount").getDirection())
                 .isEqualTo(org.springframework.data.domain.Sort.Direction.DESC);
         assertThat(result.data()).containsExactly(expected);
+    }
+
+    @Test
+    void updatesOnlyTheOwnersLinkSettings() {
+        ShortUrl shortUrl = new ShortUrl();
+        shortUrl.setOriginalUrl("https://example.com/old");
+        shortUrl.setIsPrivate(false);
+        ShortUrlDto expected = new ShortUrlDto(
+                1L, "private01", "https://example.com/new", true, null, null, 0L, Instant.now()
+        );
+
+        when(shortUrlRepository.findByIdAndCreatedById(1L, 7L)).thenReturn(java.util.Optional.of(shortUrl));
+        when(entityMapper.toShortUrlDto(shortUrl)).thenReturn(expected);
+
+        var updated = shortUrlService.updateUserShortUrl(
+                1L,
+                new UpdateShortUrlCmd("https://example.com/new", true, null, 7L)
+        );
+
+        verify(shortUrlRepository).save(shortUrl);
+        assertThat(shortUrl.getOriginalUrl()).isEqualTo("https://example.com/new");
+        assertThat(shortUrl.getIsPrivate()).isTrue();
+        assertThat(shortUrl.getExpiresAt()).isNull();
+        assertThat(updated).contains(expected);
+    }
+
+    @Test
+    void returnsEmptyWhenAnotherUserTriesToUpdateALink() {
+        when(shortUrlRepository.findByIdAndCreatedById(1L, 8L)).thenReturn(java.util.Optional.empty());
+
+        var updated = shortUrlService.updateUserShortUrl(
+                1L,
+                new UpdateShortUrlCmd("https://example.com/new", false, LocalDate.now().plusDays(7), 8L)
+        );
+
+        assertThat(updated).isEmpty();
     }
 }
