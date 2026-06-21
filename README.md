@@ -55,6 +55,9 @@ DATABASE_PASSWORD=your_password \
 ./mvnw spring-boot:run
 ```
 
+On an empty PostgreSQL database, Flyway automatically creates the application schema.
+The PostgreSQL profile validates that schema instead of letting Hibernate change it at runtime.
+
 ## Docker
 
 ```bash
