@@ -59,10 +59,15 @@ DATABASE_PASSWORD=your_password \
 
 ```bash
 cd spring-boot-url-shortener
+cp .env.example .env
 docker compose -f docker/compose.yaml up --build
 ```
 
 Open `http://localhost:8080`
+
+Docker Compose starts the app with the PostgreSQL profile and keeps database data
+in a named Docker volume. The checked-in values are local development defaults;
+change `POSTGRES_PASSWORD`, `POSTGRES_PORT`, or `APP_PORT` in `.env` when needed.
 
 Run in background:
 
