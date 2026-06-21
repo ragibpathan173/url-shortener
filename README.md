@@ -38,6 +38,10 @@ Use the browser device toolbar to preview the responsive layout:
 F12 -> Ctrl + Shift + M -> choose a phone viewport -> Ctrl + F5
 ```
 
+Local accounts and links are stored in `data/url-shortener` and survive restarts.
+That folder is intentionally ignored by Git. To start with a blank local database,
+stop the app and delete the `data` folder.
+
 ## Docker
 
 ```bash
