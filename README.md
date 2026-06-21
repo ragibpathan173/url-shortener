@@ -42,6 +42,19 @@ Local accounts and links are stored in `data/url-shortener` and survive restarts
 That folder is intentionally ignored by Git. To start with a blank local database,
 stop the app and delete the `data` folder.
 
+## PostgreSQL Profile
+
+The application can also run with PostgreSQL by enabling the `postgres` profile.
+Connection details come from environment variables, so passwords are not committed:
+
+```bash
+SPRING_PROFILES_ACTIVE=postgres \
+DATABASE_URL=jdbc:postgresql://localhost:5432/url_shortener \
+DATABASE_USERNAME=url_shortener \
+DATABASE_PASSWORD=your_password \
+./mvnw spring-boot:run
+```
+
 ## Docker
 
 ```bash
